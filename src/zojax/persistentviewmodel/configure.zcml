@@ -1,0 +1,80 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:i18n="http://namespaces.zope.org/i18n"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   i18n_domain="zojax.persistentviewmodel">
+
+  <!-- container -->
+  <zojax:content
+     name="persistent.viewmodels"
+     title="View Models Container"
+     schema=".interfaces.IViewModelsConfiglet"
+     class=".configlet.ViewModelsConfiglet"
+     contains="persistent.viewmodel"
+     type="zojax.content.type.interfaces.IInactiveType" />
+
+  <class class=".configlet.ViewModelsConfiglet">
+    <implements interface="zojax.content.type.interfaces.IEmptyNamesNotAllowed" />
+    <implements interface="zojax.content.type.interfaces.IContainerContentsAware" />
+  </class>
+
+  <!-- configlet -->
+  <zojax:configlet
+     name="ui.viewmodels"
+     title="View Models"
+     description="Custom persistent view models."
+     class=".configlet.ViewModelsConfiglet"
+     schema=".interfaces.IViewModelsConfiglet">
+    <require
+       permission="zope.Public"
+       interface="zojax.content.type.interfaces.IItem
+		  zope.app.container.interfaces.IReadContainer" />
+    <require
+       permission="zojax.Configure"
+       interface="zope.app.container.interfaces.IWriteContainer" />
+  </zojax:configlet>
+
+  <!-- view model -->
+  <zojax:content
+     title="View Model"
+     name="persistent.viewmodel"
+     class=".model.ViewModel"
+     schema=".interfaces.IPersistentViewModel"
+     containers="persistent.viewmodels"
+     description="Custom persistent view model."
+     permission="zojax.Configure" />
+
+  <class class=".model.ViewModel">
+    <require
+       permission="zope.Public"
+       attributes="errors"
+       interface=".interfaces.IPersistentViewModel" />
+    <require
+       permission="zojax.Configure"
+       set_schema=".interfaces.IPersistentViewModel" />
+  </class>
+
+  <adapter factory=".model.Sized" />
+  <subscriber handler=".model.viewModelMoved" />
+
+  <class class=".model.BoundViewModel">
+    <require
+       permission="zope.Public"
+       attributes="errors"
+       interface=".interfaces.IPersistentViewModel" />
+    <require
+       permission="zojax.Configure"
+       set_schema=".interfaces.IPersistentViewModel" />
+  </class>
+
+  <!-- vocabulary -->
+  <utility
+     name="zojax.contentext.persistentview.types"
+     factory=".vocabulary.PortalTypes" />
+
+  <!-- translations -->
+  <i18n:registerTranslations directory="locales"/>
+
+  <include package=".browser" />
+
+</configure>

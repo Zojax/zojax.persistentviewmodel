@@ -1,0 +1,93 @@
+# #############################################################################
+#
+# Copyright (c) 2009 Zope Foundation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+# #############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: Development/Unknown\n"
+"POT-Creation-Date: Tue Nov 18 01:36:05 2008\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Nikolay Kim <fafhrd91@gmail.com>\n"
+"Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+
+#: src/zojax/persistentviewmodel/browser/addmodel.pt:4
+msgid "Add View Model"
+msgstr "Добавить модель представления"
+
+#: src/zojax/persistentviewmodel/browser/model.pt:2
+msgid "Compilation failed:"
+msgstr ""
+
+#: src/zojax/persistentviewmodel/configure.zcml:10
+msgid "View Models Container"
+msgstr ""
+
+#: src/zojax/persistentviewmodel/configure.zcml:25
+msgid "View Models"
+msgstr "Модели представления"
+
+#: src/zojax/persistentviewmodel/configure.zcml:25
+msgid "Custom persistent view models."
+msgstr "Модели представления для контента."
+
+#: src/zojax/persistentviewmodel/configure.zcml:41
+msgid "View Model"
+msgstr "Модель представления"
+
+#: src/zojax/persistentviewmodel/configure.zcml:41
+msgid "Custom persistent view model."
+msgstr "Модели представления для контента."
+
+#: src/zojax/persistentviewmodel/interfaces.py:29
+msgid "Title"
+msgstr "Заголовок"
+
+#: src/zojax/persistentviewmodel/interfaces.py:30
+msgid "View model title"
+msgstr "Заголовок модели"
+
+#: src/zojax/persistentviewmodel/interfaces.py:36
+msgid "Description"
+msgstr "Описание"
+
+#: src/zojax/persistentviewmodel/interfaces.py:37
+msgid "View model description"
+msgstr "Описание модели"
+
+#: src/zojax/persistentviewmodel/interfaces.py:43
+msgid "Content view"
+msgstr ""
+
+#: src/zojax/persistentviewmodel/interfaces.py:44
+msgid "View model is view content."
+msgstr ""
+
+#: src/zojax/persistentviewmodel/interfaces.py:49
+msgid "Content type"
+msgstr "Тип контента"
+
+#: src/zojax/persistentviewmodel/interfaces.py:66
+msgid "Source"
+msgstr "Исходник"
+
+#: src/zojax/persistentviewmodel/interfaces.py:67
+msgid "The source of the view model."
+msgstr "Исходный код модели."
+
+#: src/zojax/persistentviewmodel/vocabulary.py:38
+msgid "All types"
+msgstr "Все типы"
+
