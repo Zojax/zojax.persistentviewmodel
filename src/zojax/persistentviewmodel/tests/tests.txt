@@ -1,0 +1,145 @@
+=====================
+Persistent View Model
+=====================
+
+    >>> from zope import component, interface
+    >>> from zope.testbrowser.testing import Browser
+    >>> from zope.app.testing.functional import getRootFolder
+    >>> from zope.app.component.hooks import setSite
+    >>> from zojax.persistentviewmodel.tests import content
+    >>> from zojax.persistentviewmodel.interfaces import IPersistentViewModel
+    >>> from zojax.persistentviewmodel.interfaces import IViewModelsConfiglet
+
+    >>> root = getRootFolder()
+    >>> setSite(root)
+    >>> root['folder'] = content.Folder('Folder')
+
+    >>> actor = Browser()
+    >>> actor.handleErrors = False
+    >>> actor.addHeader("Authorization", "Basic mgr:mgrpw")
+
+Add content
+
+    >>> actor.open("http://localhost/folder/context.html")
+    >>> actor.getLink('Content 1').click()
+
+    >>> actor.getControl(name='content.add.widgets.title').value = 'Test content'
+    >>> actor.getControl(name='content.add.buttons.add').click()
+    >>> print actor.contents
+    <html>
+    ...
+    ...<h1 class="z-content-title">Test content</h1>...
+    ...
+    </html>
+
+    >>> actor.open('http://localhost/folder/Content/context.html')
+    >>> actor.getLink('Presentation').click()
+    Traceback (most recent call last):
+    ...
+    LinkNotFoundError
+
+Let's create persistent view model
+
+    >>> folder = root['folder']
+    >>> content = folder['Content']
+    >>> list(component.getAdapters((content, None), IPersistentViewModel, context=root))
+    []
+
+    >>> admin = Browser()
+    >>> admin.handleErrors = False
+    >>> admin.addHeader("Authorization", "Basic mgr:mgrpw")
+
+    >>> admin.open("http://localhost/settings/ui/viewmodels/+/persistent.viewmodel/")
+    >>> admin.getControl('Title').value = u'Test view model'
+    >>> admin.getControl(name="content.add.widgets.contentView:list").value = [u'true']
+    >>> admin.getControl('Source').value = """
+    ... <div>Test view model</div>
+    ... """
+    >>> admin.getControl('Content short name').value = 'test.model1'
+    >>> admin.getControl(name='content.add.buttons.add').click()
+    >>> print admin.contents
+    <html>
+    ...
+    <h1 class="z-content-title">Test view model</h1>
+    ...
+    &lt;div&gt;Test view model&lt;/div&gt;
+    ...
+    </html>
+
+    >>> list(component.getAdapters((content, None), IPersistentViewModel))
+    [(u'test.model1', <zojax.persistentviewmodel.model.BoundViewModel object at ...>)]
+
+    >>> admin.open("http://localhost/settings/ui/viewmodels/test.model1/context.html/content/")
+    >>> admin.getControl('Title').value = u'Test model'
+    >>> admin.getControl('Short Name').value = u'test.model2'
+    >>> admin.getControl(name='content.edit.buttons.save').click()
+
+    >>> views = list(component.getAdapters((content, None), IPersistentViewModel))
+    >>> views
+    [(u'test.model2', <zojax.persistentviewmodel.model.BoundViewModel object at ...>)]
+
+    >>> view = views[0][1]
+
+    >>> view.__name__
+    u'test.model2'
+
+    >>> view.isAvailable()
+    False
+
+    >>> view.contentType = ['content1']
+    >>> view.isAvailable()
+    True
+
+    >>> view.contentType = ['__all__']
+    >>> view.isAvailable()
+    True
+
+    >>> configlet = component.getUtility(IViewModelsConfiglet)
+    >>> configlet['test.model2'].contentType = ['content1']
+
+Select view for content
+
+    >>> actor.reload()
+    >>> actor.getLink('Presentation').click()
+    >>> print actor.contents
+    <html>
+    ...
+     <li><div class="z-listing-icon">
+        <input type="radio" id="content-model-widgets-view-1" name="content.model.widgets.view:list" class="z-listing required radiochoice-field" title="Test model" value="test.model2" />
+      </div>
+      <div class="z-listing-details">
+        <span>Test model</span>
+        <div></div>
+      </div>
+    </li>
+    ...
+    </html>
+
+    >>> actor.getControl(name="content.model.widgets.view:list").value = ['test.model2']
+    >>> actor.getControl(name="content.model.buttons.save").click()
+    >>> print actor.contents
+    <html>
+    ...Data successfully updated...
+    </html>
+
+Now test model is used for rendering
+
+    >>> actor.open('http://localhost/folder/Content/')
+    >>> print actor.contents
+    <html>
+    ...
+    ...<div class="z-content-body"><div>Test view model</div>
+    ...
+    </html>
+
+
+Removing model
+
+    >>> admin.open("http://localhost/settings/ui/viewmodels/")
+    >>> admin.getControl(name='ids:list').value = [u'test.model2']
+    >>> admin.getControl(name="form.buttons.delete").click()
+
+    >>> list(component.getAdapters((content, None), IPersistentViewModel))
+    []
+
+    >>> setSite(None)
