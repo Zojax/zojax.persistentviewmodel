@@ -104,16 +104,17 @@ Select view for content
     >>> print actor.contents
     <html>
     ...
-     <li><div class="z-listing-icon">
+      <div class="z-listing-icon">
         <input type="radio" id="content-model-widgets-view-1" name="content.model.widgets.view:list" class="z-listing required radiochoice-field" title="Test model" value="test.model2" />
       </div>
       <div class="z-listing-details">
         <span>Test model</span>
         <div></div>
       </div>
-    </li>
     ...
     </html>
+
+
 
     >>> actor.getControl(name="content.model.widgets.view:list").value = ['test.model2']
     >>> actor.getControl(name="content.model.buttons.save").click()
